@@ -44,9 +44,9 @@ app.get("/scrape", function(req, res) {
             console.log(err);
           });
       });
-  
+  console.log("test redirect")
       // Send a message to the client
-      res.send("Scrape Complete");
+      res.redirect("/");    
     });
   });
   

@@ -7,6 +7,18 @@ $.getJSON("/articles", function(data) {
     }
   });
   
+// On click function calls ajax to get /scrape which allows it to scrape everything, THEN redirects to /
+  $(document).on("click", "#getArticles", function(){
+    console.log("fireeeeee")
+    $.ajax({
+      method: "GET",
+      url: "/scrape"
+    })
+    .then(function(data){
+      window.location.replace("/");
+    })
+
+  })
   
   // Whenever someone clicks a p tag
   $(document).on("click", "p", function() {
@@ -18,7 +30,7 @@ $.getJSON("/articles", function(data) {
     // Now make an ajax call for the Article
     $.ajax({
       method: "GET",
-      url: "/articles/" + thisId
+      url: "/articles"
     })
       // With that done, add the note information to the page
       .then(function(data) {
