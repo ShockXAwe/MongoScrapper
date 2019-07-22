@@ -6,13 +6,13 @@ var cheerio = require("cheerio");
 var db = require("./models");
 var PORT = 3001;
 var app = express();
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoScrapper";
+mongoose.connect(MONGODB_URI);
 
 app.use(logger("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
-
-mongoose.connect("mongodb://localhost/mongoScrapper", { useNewUrlParser: true });
 
 app.get("/scrape", function(req, res) {
     // First, we grab the body of the html with axios
@@ -63,6 +63,33 @@ app.get("/scrape", function(req, res) {
         res.json(err);
       });
   });
+
+// Route for grabbing a specific Article by id, populate it with it's note
+  app.get("/articles/:id", function(req, res) {
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+    db.Article.findOne({ _id: req.params.id })
+      // ..and populate all of the notes associated with it
+      .populate("note")
+      .then(function(dbArticle) {
+        // If we were able to successfully find an Article with the given id, send it back to the client
+        res.json(dbArticle);
+      })
+      .catch(function(err) {
+        // If an error occurred, send it to the client
+        res.json(err);
+      });
+  });
+
+  //Route to delete
+  app.get("/delete", function(req, res) {
+    db.Article.remove()
+    .then(function(dbArticle){
+      res.json(dbArticle);
+    })
+    .catch(function(err){
+      res.json(err);
+    })
+  })
 
   app.listen(PORT, function() {
     console.log("App running on port " + PORT + "!");
