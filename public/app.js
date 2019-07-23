@@ -28,6 +28,20 @@ $(document).on("click", "#clearArticles", function () {
     url: "/delete"
   })
     .then(function (data) {
+      alert("Clearing scraped data!!")
+      window.location.replace("/");
+    })
+
+})
+
+$(document).on("click", "#clearNotes", function () {
+  console.log("fireeeeee")
+  $.ajax({
+    method: "GET",
+    url: "/deleteNotes"
+  })
+    .then(function (data) {
+      alert("Clearing Notes data!!")
       window.location.replace("/");
     })
 
