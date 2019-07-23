@@ -7,12 +7,13 @@ var db = require("./models");
 var PORT = 3001;
 var app = express();
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoScrapper";
-mongoose.connect(MONGODB_URI);
 
 app.use(logger("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
+mongoose.connect(MONGODB_URI);
+
 
 app.get("/scrape", function(req, res) {
     // First, we grab the body of the html with axios
